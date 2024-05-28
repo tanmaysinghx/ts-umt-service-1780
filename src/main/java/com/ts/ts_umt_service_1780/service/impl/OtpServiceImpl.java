@@ -1,6 +1,7 @@
 package com.ts.ts_umt_service_1780.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.ts.ts_umt_service_1780.entity.OtpEntity;
@@ -22,15 +23,19 @@ public class OtpServiceImpl implements OtpService {
 	private final Random random = new SecureRandom();
 
 	public OtpEntity createOtp(OtpEntity otpEntity) throws Exception {
-	    System.out.println("Tanmay 1");
-        String otp = generateOtp(OTP_LENGTH);
-        otpEntity.setUserOtp(otp);
-        otpEntity.setExpireTimeStamp(System.currentTimeMillis() + OTP_VALIDITY_DURATION);
-        otpEntity.setCreateTimeStamp(System.currentTimeMillis());
-        otpRepo.save(otpEntity);  // Save the OTP to the repository
-        System.out.printf("Tanmay 2", otpEntity);
-        return otpEntity;
-    }
+	    OtpEntity local = this.otpRepo.findByUserEmail(otpEntity.getUserEmail());
+	    if (local != null) {
+	        // Delete the old record
+	        otpRepo.delete(local);
+	    }
+	    String otp = generateOtp(OTP_LENGTH);
+	    otpEntity.setUserOtp(otp);
+	    otpEntity.setExpireTimeStamp(System.currentTimeMillis() + OTP_VALIDITY_DURATION);
+	    otpEntity.setCreateTimeStamp(System.currentTimeMillis());
+	    otpRepo.save(otpEntity); // Save the OTP to the repository
+	    return otpEntity;
+	}
+
 
 	private String generateOtp(int length) {
 		StringBuilder otp = new StringBuilder(length);
@@ -39,5 +44,7 @@ public class OtpServiceImpl implements OtpService {
 		}
 		return otp.toString();
 	}
+
+	
 
 }

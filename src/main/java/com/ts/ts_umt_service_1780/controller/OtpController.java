@@ -18,7 +18,7 @@ public class OtpController {
 	@Autowired
 	private OtpService otpService;
 	
-	@PostMapping("/create-otp")
+	@PostMapping("/generate-otp")
     public OtpEntity createOtp(@RequestBody OtpEntity otpEntity) throws Exception {
         
         return this.otpService.createOtp(otpEntity);
