@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.ts.ts_umt_service_1780.dto.OtpVerificationResponseDto;
 import com.ts.ts_umt_service_1780.entity.OtpEntity;
 import com.ts.ts_umt_service_1780.repo.OtpRepo;
 import com.ts.ts_umt_service_1780.service.OtpService;
@@ -23,19 +24,18 @@ public class OtpServiceImpl implements OtpService {
 	private final Random random = new SecureRandom();
 
 	public OtpEntity createOtp(OtpEntity otpEntity) throws Exception {
-	    OtpEntity local = this.otpRepo.findByUserEmail(otpEntity.getUserEmail());
-	    if (local != null) {
-	        // Delete the old record
-	        otpRepo.delete(local);
-	    }
-	    String otp = generateOtp(OTP_LENGTH);
-	    otpEntity.setUserOtp(otp);
-	    otpEntity.setExpireTimeStamp(System.currentTimeMillis() + OTP_VALIDITY_DURATION);
-	    otpEntity.setCreateTimeStamp(System.currentTimeMillis());
-	    otpRepo.save(otpEntity); // Save the OTP to the repository
-	    return otpEntity;
+		OtpEntity local = this.otpRepo.findByUserEmail(otpEntity.getUserEmail());
+		if (local != null) {
+			// Delete the old record
+			otpRepo.delete(local);
+		}
+		String otp = generateOtp(OTP_LENGTH);
+		otpEntity.setUserOtp(otp);
+		otpEntity.setExpireTimeStamp(System.currentTimeMillis() + OTP_VALIDITY_DURATION);
+		otpEntity.setCreateTimeStamp(System.currentTimeMillis());
+		otpRepo.save(otpEntity); // Save the OTP to the repository
+		return otpEntity;
 	}
-
 
 	private String generateOtp(int length) {
 		StringBuilder otp = new StringBuilder(length);
@@ -45,6 +45,20 @@ public class OtpServiceImpl implements OtpService {
 		return otp.toString();
 	}
 
-	
-
+	public OtpVerificationResponseDto verifyOtp(String otp, String userEmail) throws Exception {
+		OtpEntity local = this.otpRepo.findByUserEmail(userEmail);
+		if (local == null) {
+			return new OtpVerificationResponseDto(false, "Invalid OTP");
+		}
+		long currentTime = System.currentTimeMillis();
+		if (currentTime > local.getExpireTimeStamp()) {
+			return new OtpVerificationResponseDto(false, "OTP has expired");
+		}
+		if (local.getUserOtp().equals(otp)) {
+			otpRepo.delete(local);
+			return new OtpVerificationResponseDto(true, "OTP verified successfully", local);
+		} else {
+			return new OtpVerificationResponseDto(false, "OTP does not match");
+		}
+	}
 }
