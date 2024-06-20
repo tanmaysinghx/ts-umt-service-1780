@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.ts.ts_umt_service_1780.dto.OtpVerificationResponseDto;
 import com.ts.ts_umt_service_1780.entity.OtpEntity;
 import com.ts.ts_umt_service_1780.repo.OtpRepo;
+import com.ts.ts_umt_service_1780.service.EmailService;
 import com.ts.ts_umt_service_1780.service.OtpService;
 
 import java.security.SecureRandom;
@@ -18,6 +19,9 @@ public class OtpServiceImpl implements OtpService {
 
 	@Autowired
 	private OtpRepo otpRepo;
+	
+	@Autowired
+    private EmailService emailService;
 
 	private static final int OTP_LENGTH = 6;
 	private static final long OTP_VALIDITY_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
@@ -34,6 +38,8 @@ public class OtpServiceImpl implements OtpService {
 		otpEntity.setExpireTimeStamp(System.currentTimeMillis() + OTP_VALIDITY_DURATION);
 		otpEntity.setCreateTimeStamp(System.currentTimeMillis());
 		otpRepo.save(otpEntity); // Save the OTP to the repository
+		// Send the OTP via email
+        emailService.sendOtpEmail(otpEntity.getUserEmail(), otp);
 		return otpEntity;
 	}
 
