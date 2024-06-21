@@ -1,92 +1,103 @@
 package com.ts.ts_umt_service_1780.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name="USER_DETAILS")
-public class CompleteRegistrationEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private Long userId;
-	
-	@Column(name="USER_EMAIL")
-	private String userEmail;
-	
-	@Column(name="USER_FULL_NAME")
-	private String userFullName;
-	
-	@Column(name="USER_COUNTRY")
-	private String userCountry;
-	
-	@Column(name="USER_CITY")
-	private String userCity;
-	
-	@Column(name="USER_ADDRESS")
-	private String userAddress;
-	
-	@Column(name="USER_PHONE_NUMBER")
-	private Long userPhoneNumber;
-	
-	@Column(name="USER_SECONDARY_PHONE_NUMBER")
-	private Long userSecondaryPhoneNumber;
-	
-	@Column(name="USER_DOB")
-	private String userDob;
-	
-	@Column(name="USER_ZIP_CODE")
-	private Long userZipCode;
-	
-	@Column(name="USER_COMPANY_NAME")
-	private String userCompanyName;
-	
-	@Column(name="USER_EMPLOYEES_COUNT")
-	private Long userEmployeesCount;
-	
-	@Column(name="USER_COMPANY_COUNTRY")
-	private String userCompanyCountry;
-	
-	@Column(name="USER_COMPANY_CITY")
-	private String userCompanyCity;
-	
-	@Column(name="USER_COMPANY_ADDRESS")
-	private String userCompanyAddress;
-	
-	@Column(name="USER_COMPANY_ZIP")
-	private Long userCompanyZip;
+public class CompleteRegistrationEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-	public CompleteRegistrationEntity() {
-		super();
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long userId;
 
-	public CompleteRegistrationEntity(Long userId, String userEmail, String userFullName, String userCountry,
-			String userCity, String userAddress, Long userPhoneNumber, Long userSecondaryPhoneNumber, String userDob,
-			Long userZipCode, String userCompanyName, Long userEmployeesCount, String userCompanyCountry,
-			String userCompanyCity, String userCompanyAddress, Long userCompanyZip) {
-		super();
-		this.userId = userId;
-		this.userEmail = userEmail;
-		this.userFullName = userFullName;
-		this.userCountry = userCountry;
-		this.userCity = userCity;
-		this.userAddress = userAddress;
-		this.userPhoneNumber = userPhoneNumber;
-		this.userSecondaryPhoneNumber = userSecondaryPhoneNumber;
-		this.userDob = userDob;
-		this.userZipCode = userZipCode;
-		this.userCompanyName = userCompanyName;
-		this.userEmployeesCount = userEmployeesCount;
-		this.userCompanyCountry = userCompanyCountry;
-		this.userCompanyCity = userCompanyCity;
-		this.userCompanyAddress = userCompanyAddress;
-		this.userCompanyZip = userCompanyZip;
-	}
+    @Column(name="USER_EMAIL", nullable = false, unique = true)
+    @Email
+    @NotNull
+    private String userEmail;
 
-	public Long getUserId() {
+    @Column(name="USER_FULL_NAME", nullable = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    private String userFullName;
+
+    @Column(name="USER_COUNTRY", nullable = false)
+    @NotNull
+    private String userCountry;
+
+    @Column(name="USER_CITY", nullable = false)
+    @NotNull
+    private String userCity;
+
+    @Column(name="USER_ADDRESS", nullable = false)
+    @NotNull
+    private String userAddress;
+
+    @Column(name="USER_PHONE_NUMBER", nullable = false)
+    @NotNull
+    @Size(min = 10, max = 15)
+    private String userPhoneNumber;
+
+    @Column(name="USER_SECONDARY_PHONE_NUMBER")
+    @Size(min = 10, max = 15)
+    private String userSecondaryPhoneNumber;
+
+    @Column(name="USER_DOB", nullable = false)
+    @NotNull
+    private String userDob;
+
+    @Column(name="USER_ZIP_CODE", nullable = false)
+    @NotNull
+    @Size(min = 5, max = 10)
+    private String userZipCode;
+
+    @Column(name="USER_COMPANY_NAME")
+    private String userCompanyName;
+
+    @Column(name="USER_EMPLOYEES_COUNT")
+    private Long userEmployeesCount;
+
+    @Column(name="USER_COMPANY_COUNTRY")
+    private String userCompanyCountry;
+
+    @Column(name="USER_COMPANY_CITY")
+    private String userCompanyCity;
+
+    @Column(name="USER_COMPANY_ADDRESS")
+    private String userCompanyAddress;
+
+    @Column(name="USER_COMPANY_ZIP")
+    private String userCompanyZip;
+
+    public CompleteRegistrationEntity() {
+    }
+
+    public CompleteRegistrationEntity(Long userId, String userEmail, String userFullName, String userCountry,
+                                      String userCity, String userAddress, String userPhoneNumber, String userSecondaryPhoneNumber,
+                                      String userDob, String userZipCode, String userCompanyName, Long userEmployeesCount,
+                                      String userCompanyCountry, String userCompanyCity, String userCompanyAddress,
+                                      String userCompanyZip) {
+        this.userId = userId;
+        this.userEmail = userEmail;
+        this.userFullName = userFullName;
+        this.userCountry = userCountry;
+        this.userCity = userCity;
+        this.userAddress = userAddress;
+        this.userPhoneNumber = userPhoneNumber;
+        this.userSecondaryPhoneNumber = userSecondaryPhoneNumber;
+        this.userDob = userDob;
+        this.userZipCode = userZipCode;
+        this.userCompanyName = userCompanyName;
+        this.userEmployeesCount = userEmployeesCount;
+        this.userCompanyCountry = userCompanyCountry;
+        this.userCompanyCity = userCompanyCity;
+        this.userCompanyAddress = userCompanyAddress;
+        this.userCompanyZip = userCompanyZip;
+    }
+
+    public Long getUserId() {
 		return userId;
 	}
 
@@ -134,19 +145,19 @@ public class CompleteRegistrationEntity {
 		this.userAddress = userAddress;
 	}
 
-	public Long getUserPhoneNumber() {
+	public String getUserPhoneNumber() {
 		return userPhoneNumber;
 	}
 
-	public void setUserPhoneNumber(Long userPhoneNumber) {
+	public void setUserPhoneNumber(String userPhoneNumber) {
 		this.userPhoneNumber = userPhoneNumber;
 	}
 
-	public Long getUserSecondaryPhoneNumber() {
+	public String getUserSecondaryPhoneNumber() {
 		return userSecondaryPhoneNumber;
 	}
 
-	public void setUserSecondaryPhoneNumber(Long userSecondaryPhoneNumber) {
+	public void setUserSecondaryPhoneNumber(String userSecondaryPhoneNumber) {
 		this.userSecondaryPhoneNumber = userSecondaryPhoneNumber;
 	}
 
@@ -158,11 +169,11 @@ public class CompleteRegistrationEntity {
 		this.userDob = userDob;
 	}
 
-	public Long getUserZipCode() {
+	public String getUserZipCode() {
 		return userZipCode;
 	}
 
-	public void setUserZipCode(Long userZipCode) {
+	public void setUserZipCode(String userZipCode) {
 		this.userZipCode = userZipCode;
 	}
 
@@ -206,23 +217,26 @@ public class CompleteRegistrationEntity {
 		this.userCompanyAddress = userCompanyAddress;
 	}
 
-	public Long getUserCompanyZip() {
+	public String getUserCompanyZip() {
 		return userCompanyZip;
 	}
 
-	public void setUserCompanyZip(Long userCompanyZip) {
+	public void setUserCompanyZip(String userCompanyZip) {
 		this.userCompanyZip = userCompanyZip;
 	}
 
-	@Override
-	public String toString() {
-		return "CompleteRegistrationEntity [userId=" + userId + ", userEmail=" + userEmail + ", userFullName="
-				+ userFullName + ", userCountry=" + userCountry + ", userCity=" + userCity + ", userAddress="
-				+ userAddress + ", userPhoneNumber=" + userPhoneNumber + ", userSecondaryPhoneNumber="
-				+ userSecondaryPhoneNumber + ", userDob=" + userDob + ", userZipCode=" + userZipCode
-				+ ", userCompanyName=" + userCompanyName + ", userEmployeesCount=" + userEmployeesCount
-				+ ", userCompanyCountry=" + userCompanyCountry + ", userCompanyCity=" + userCompanyCity
-				+ ", userCompanyAddress=" + userCompanyAddress + ", userCompanyZip=" + userCompanyZip + "]";
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
-	
+
+	@Override
+    public String toString() {
+        return "CompleteRegistrationEntity [userId=" + userId + ", userEmail=" + userEmail + ", userFullName="
+                + userFullName + ", userCountry=" + userCountry + ", userCity=" + userCity + ", userAddress="
+                + userAddress + ", userPhoneNumber=" + userPhoneNumber + ", userSecondaryPhoneNumber="
+                + userSecondaryPhoneNumber + ", userDob=" + userDob + ", userZipCode=" + userZipCode
+                + ", userCompanyName=" + userCompanyName + ", userEmployeesCount=" + userEmployeesCount
+                + ", userCompanyCountry=" + userCompanyCountry + ", userCompanyCity=" + userCompanyCity
+                + ", userCompanyAddress=" + userCompanyAddress + ", userCompanyZip=" + userCompanyZip + "]";
+    }
 }
